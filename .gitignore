@@ -1,0 +1,19 @@
+# Dipendenze Node.js
+node_modules/
+
+# File ambiente locale
+.env
+
+# Log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cartelle temporanee
+.tmp/
+dist/
+coverage/
+
+# File sistema
+.DS_Store
+Thumbs.db
