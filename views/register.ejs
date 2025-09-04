@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Registrazione - ComixCity</title>
+  <link rel="stylesheet" href="/css/stile.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+  <%- include('partials/navbar1') %>
+
+    <section class="hero chi-siamo-hero">
+      <div class="hero-content-chisiamo">
+        <h1 data-aos="fade-up">Registrati</h1>
+        <p data-aos="fade-up" data-aos-delay="300">Unisciti alla community di ComixCity!</p>
+      </div>
+    </section>
+
+    <main class="register-section background-gradient">
+      <div class="register-container" data-aos="fade-up">
+        <form action="/register" method="POST" class="register-form">
+
+          <label for="username" data-aos="fade-right" data-aos-delay="100">Username</label>
+          <input type="text" id="username" name="username" required>
+
+          <label for="email" data-aos="fade-right" data-aos-delay="300">Email</label>
+          <input type="email" id="email" name="email" required pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="Inserisci un'email valida">
+
+          <label for="password" data-aos="fade-right" data-aos-delay="500">Password</label>
+          <input type="password" id="password" name="password" required  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+       title="Minimo 8 caratteri, almeno una maiuscola, una minuscola e un numero">
+
+          <label for="ruolo" data-aos="fade-right" data-aos-delay="700">Registrati come:</label>
+          <select name="ruolo" id="ruolo" required data-aos="fade-left" data-aos-delay="800">
+            <option value="utente">Utente</option>
+            <option value="espositore">Espositore</option>
+          </select>
+
+          <button type="submit" class="btn" data-aos="zoom-in" data-aos-delay="900">Registrati</button>
+        </form>
+
+        <p class="login-link" data-aos="fade-up" data-aos-delay="1000">Hai già un account? <a href="/login">Accedi
+            qui</a></p>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+      <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+      <script src="/js/script.js"></script>
+</body>
+
+</html>

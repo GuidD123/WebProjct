@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Biglietti - ComixCity</title>
+    <link rel="stylesheet" href="/css/stile.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <%- include('partials/navbar1') %>
+
+    <div id="toast" class="toast">Aggiunto al carrello!</div>
+
+    <section class="background-gradient">
+      <!-- HERO BIGLIETTI -->
+      <section class="biglietti-hero">
+        <div class="hero-content-chisiamo">
+          <h1 data-aos="fade-up">Biglietti</h1>
+          <p data-aos="fade-up" data-aos-delay="300">
+            Entra nel mondo di ComixCity. Scegli il tuo biglietto!
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <div class="biglietti-wrapper">
+          <% const bigliettoIntero=biglietti.find(b=> b.nome === 'Biglietto Intero'); %>
+          <!-- Biglietto Intero -->
+          <div
+            class="biglietto-full-card"
+            data-aos="slide-right"
+            data-aos-delay="0"
+          >
+            <div class="card-content">
+              <h3>🎫 Biglietto Intero</h3>
+              <hr class="ticket-divider" />
+              <p class="prezzo">€15</p>
+              <p>Validità 1 giorno. Accesso a tutte le aree della fiera.</p>
+              <ul class="caratteristiche">
+                <li>✅ Area comics, games, cosplay</li>
+                <li>✅ Eventi live, palchi, panel</li>
+                <li>✅ Kit gadget all'ingresso</li>
+              </ul>
+              <p class="note">
+                Non rimborsabile. Valido solo per il giorno selezionato.
+              </p>
+            </div>
+            <% if (bigliettoIntero.disponibili> 0) { %>
+            <form action="/biglietti/acquista" method="POST">
+              <input
+                type="hidden"
+                name="bigliettoId"
+                value="<%= bigliettoIntero.id %>"
+              />
+              <input
+                type="number"
+                title="Massimo 5 biglietti per utente"
+                name="quantita"
+                value="1"
+                min="1"
+                max="<%= bigliettoIntero.disponibili %>"
+                required
+              />
+              <button type="submit" class="btn">Acquista ora</button>
+            </form>
+            <% } else { %>
+            <button class="btn-disabled" disabled>Esaurito</button>
+            <% } %>
+          </div>
+
+          <% const bigliettoCosplayer=biglietti.find(b=> b.nome === 'Ridotto Cosplayer'); %>
+          <!-- Biglietto Cosplayer -->
+          <div
+            class="biglietto-full-card"
+            data-aos="slide-right"
+            data-aos-delay="50"
+          >
+            <div class="card-content">
+              <h3>🎭 Ridotto Cosplayer</h3>
+              <hr class="ticket-divider" />
+              <p class="prezzo">€10</p>
+              <p>Prezzo speciale riservato a chi si presenta in costume.</p>
+              <ul class="caratteristiche">
+                <li>✅ Accesso anticipato area cosplay</li>
+                <li>✅ Partecipazione a contest</li>
+                <li>✅ Omaggio dedicato</li>
+              </ul>
+              <p class="note">Controllo costume all’ingresso obbligatorio.</p>
+            </div>
+
+            <% if (bigliettoCosplayer.disponibili> 0) { %>
+            <form action="/biglietti/acquista" method="POST">
+              <input
+                type="hidden"
+                name="bigliettoId"
+                value="<%= bigliettoCosplayer.id %>"
+              />
+              <input
+                type="number"
+                title="Massimo 5 biglietti per utente"
+                name="quantita"
+                value="1"
+                min="1"
+                max="<%= bigliettoCosplayer.disponibili %>"
+                required
+              />
+              <button type="submit" class="btn">Acquista ora</button>
+            </form>
+            <% } else { %>
+            <button class="btn-disabled" disabled>Esaurito</button>
+            <% } %>
+          </div>
+
+          <% const bigliettoStudente=biglietti.find(b=> b.nome === 'Ridotto Studente'); %>
+          <!-- Biglietto Studente -->
+          <div
+            class="biglietto-full-card"
+            data-aos="slide-up"
+            data-aos-delay="100"
+          >
+            <div class="card-content">
+              <h3>🎓 Studente</h3>
+              <hr class="ticket-divider" />
+              <p class="prezzo">€8</p>
+              <p>
+                Per tutti gli studenti universitari con tessera valida e
+                studenti delle superiori.
+              </p>
+              <ul class="caratteristiche">
+                <li>✅ Accesso completo</li>
+                <li>✅ Area relax studenti</li>
+                <li>⚠️ Mostrare tesserino in biglietteria</li>
+              </ul>
+              <p class="note">
+                Offerta valida solo per studenti delle scuole superiori o
+                universitari.
+              </p>
+            </div>
+
+            <% if (bigliettoStudente.disponibili> 0) { %>
+            <form action="/biglietti/acquista" method="POST">
+              <input
+                type="hidden"
+                name="bigliettoId"
+                value="<%= bigliettoStudente.id %>"
+              />
+              <input
+                type="number"
+                title="Massimo 5 biglietti per utente"
+                name="quantita"
+                value="1"
+                min="1"
+                max="<%= bigliettoStudente.disponibili %>"
+                required
+              />
+              <button type="submit" class="btn">Acquista ora</button>
+            </form>
+            <% } else { %>
+            <button class="btn-disabled" disabled>Esaurito</button>
+            <% } %>
+          </div>
+
+          <% const bigliettoGratuitoUnder12=biglietti.find(b=> b.nome === 'Gratuito Under 12'); %>
+          <!-- Biglietto Gratuito Under 12 -->
+          <div
+            class="biglietto-full-card"
+            data-aos="slide-left"
+            data-aos-delay="150"
+          >
+            <div class="card-content">
+              <h3>👶 Ridotto Under 12</h3>
+              <hr class="ticket-divider" />
+              <p class="prezzo">Gratuito</p>
+              <p>Riservato a bambini fino a 12 anni compresi.</p>
+              <ul class="caratteristiche">
+                <li>✅ Accesso a tutte le aree</li>
+                <li>✅ Eventi family-friendly</li>
+                <li>⚠️ Documento obbligatorio all’ingresso</li>
+              </ul>
+              <p class="note">Valido solo per minori accompagnati.</p>
+            </div>
+
+            <% if (bigliettoGratuitoUnder12.disponibili> 0) { %>
+            <form action="/biglietti/acquista" method="POST">
+              <input
+                type="hidden"
+                name="bigliettoId"
+                value="<%= bigliettoGratuitoUnder12.id %>"
+              />
+              <input
+                type="number"
+                name="quantita"
+                value="1"
+                min="1"
+                max="<%= bigliettoGratuitoUnder12.disponibili %>"
+                required
+              />
+              <button type="submit" class="btn">Acquista ora</button>
+            </form>
+            <% } else { %>
+            <button class="btn-disabled" disabled>Esaurito</button>
+            <% } %>
+          </div>
+
+          <% const bigliettoDisabili=biglietti.find(b=> b.nome === 'Gratuito Disabili'); %>
+          <!-- Biglietto Gratuito per Disabili -->
+          <% if (bigliettoDisabili) { %>
+          <div
+            class="biglietto-full-card"
+            data-aos="slide-left"
+            data-aos-delay="200"
+          >
+            <div class="card-content">
+              <h3>♿ Persone con Disabilità</h3>
+              <hr class="ticket-divider" />
+              <p class="prezzo">Gratuito</p>
+              <p>
+                Accesso riservato a persone con disabilità, con ingresso
+                prioritario.
+              </p>
+              <ul class="caratteristiche">
+                <li>✅ Accesso completo e prioritario</li>
+                <li>✅ Area relax riservata</li>
+                <li>⚠️ È richiesto un documento o certificazione</li>
+              </ul>
+              <p class="note">
+                Valido solo per persona con disabilità certificata.
+              </p>
+            </div>
+
+            <% if (bigliettoDisabili.disponibili> 0) { %>
+            <form action="/biglietti/acquista" method="POST">
+              <input
+                type="hidden"
+                name="bigliettoId"
+                value="<%= bigliettoDisabili.id %>"
+              />
+              <input
+                type="number"
+                name="quantita"
+                value="1"
+                min="1"
+                max="<%= bigliettoDisabili.disponibili %>"
+                required
+              />
+              <button type="submit" class="btn">Prenota ora</button>
+            </form>
+            <% } else { %>
+            <button class="btn-disabled" disabled>Esaurito</button>
+            <% } %>
+          </div>
+          <% } %>
+        </div>
+      </section>
+    </section>
+
+    <%- include('partials/footer') %>
+    <script src="/js/script.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Prenota Stand - ComixCity</title>
+  <link rel="stylesheet" href="/css/stile.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+  <%- include('partials/navbar1') %>
+
+
+    <section class="background-gradient">
+
+      <!-- HERO STAND -->
+      <section class="stand-hero">
+        <div class="hero-content-stand">
+          <h1>Sei un espositore?</h1>
+          <p>Diventa protagonista a ComixCity! Compila il form qua in basso e prenota il tuo stand!</p>
+        </div>
+      </section>
+
+      <!-- SEZIONE PRENOTAZIONE STAND -->
+      <section class="stand-main">
+        <div class="stand-container">
+
+          <% if (query.successo==='1' ) { %>
+            <div class="alert-success" data-aos="fade-down">
+              <p>Prenotazione completata con successo!</p>
+            </div>
+            <% } %>
+
+              <h2 data-aos="fade-up">Seleziona la tua Piazzola</h2>
+
+              <form action="/stand/prenota" method="POST" class="form-stand">
+                <div class="input-group" data-aos="fade-right">
+                  <label for="nomeEspositore">Nome Espositore</label>
+                  <input type="text" id="nomeEspositore" name="nomeEspositore" required>
+                </div>
+
+                <div class="input-group" data-aos="fade-right" data-aos-delay="100">
+                  <label for="email">Email di Contatto</label>
+                  <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="input-group" data-aos="fade-right" data-aos-delay="200">
+                  <label for="standId">Scegli il tuo Stand</label>
+
+                  <select id="standId" name="standId" required>
+                    <option value="">-- Seleziona --</option>
+                    <% stand.forEach(s=> { %>
+                      <option value="<%= s.id %>">
+                        <%= s.nome %>
+                      </option>
+                      <% }) %>
+                  </select>
+                </div>
+
+                <button type="submit" class="btn" data-aos="zoom-in" data-aos-delay="300">Prenota Ora</button>
+              </form>
+
+              <div class="stand-info" data-aos="fade-up" data-aos-delay="400">
+                <h3>Perché Esporre a ComixCity?</h3>
+                <ul>
+                  <li>Visibilità a migliaia di appassionati</li>
+                  <li>Area espositiva attrezzata</li>
+                  <li>Supporto logistico completo</li>
+                  <li>Possibilità di vendere i tuoi prodotti</li>
+                </ul>
+              </div>
+        </div>
+      </section>
+    </section>
+
+
+    <%- include('partials/footer') %>
+      <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+      <script src="/js/script.js"></script>
+
+</body>
+
+</html>

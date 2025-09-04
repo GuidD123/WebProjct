@@ -1,0 +1,76 @@
+<nav class="navbar" id="mainNav">
+    <div class="navbar-container">
+
+        <!--SINISTRA-->
+        <div class="navbar-logo navbar-left">
+            <a href="/" class="logo">ComixCity</a>
+        </div>
+
+        <!--DESTRA-->
+        <div class="navbar-right">
+            <div class="search-container">
+                <button class="search-toggle" aria-label="Cerca">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M10 2a8 8 0 105.293 14.293l5.707 5.707 1.414-1.414-5.707-5.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
+                    </svg>
+                </button>
+
+
+                <!-- Searchbar nascosta -->
+                <div class="search-bar-wrapper" id="searchBar">
+                    <form class="search-form" method="GET" action="/eventi">
+                        <input type="text" name="q" placeholder="Cerca..." required>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- Hamburger per mobile -->
+            <button class="hamburger" id="hamburger" aria-label="Apri menu">&#9776;</button>
+
+            <ul class="menu" id="menu">
+                <li><a href="/biglietti">Biglietti</a></li>
+                <li><a href="/eventi">Eventi</a></li>
+                <li><a href="/stand">Stand</a></li>
+                <% if (user && user.ruolo==='admin' ) { %>
+                    <li><a href="/eventi/nuovo">+ Nuovo Evento</a></li>
+                <% } %>
+            </ul>
+            <div class="menu-overlay" id="menuOverlay"></div>
+
+            <% if (user && user.ruolo==='admin' ) { %>
+                <a href="/admin" class="nav-btn">Admin</a>
+                <% } %>
+
+
+                    <% if (user) { %>
+                        <a href="/profilo" class="nav-btn login-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                viewBox="0 0 16 16" class="icon-svg">
+                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z" />
+                            </svg>
+                            Area Personale
+                        </a>
+                        <a href="/logout" class="nav-btn login-link">Logout</a>
+                        <% } else { %>
+                            <a href="/login" class="nav-btn login-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    viewBox="0 0 16 16" class="icon-svg">
+                                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z" />
+                                </svg>
+                                Login
+                            </a>
+                            <% } %>
+
+
+                                <a href="/carrello" class="nav-btn cart-link">
+                                    Carrello
+                                    <span class="cart-badge" id="cartBadge">
+                                        <%= carrello.length %>
+                                    </span>
+                                </a>
+        </div>
+    </div>
+</nav>

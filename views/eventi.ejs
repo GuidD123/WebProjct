@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Eventi - ComixCity</title>
+  <link rel="stylesheet" href="/css/stile.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+
+<body>
+  <%- include('partials/navbar1') %>
+
+    <section class="background-gradient">
+      <!-- HERO EVENTI -->
+      <section class="hero3 eventi-hero">
+        <div class="hero-content-chisiamo">
+          <h1 data-aos="fade-down">Scopri gli Eventi</h1>
+          <p data-aos="fade-down" data-aos-delay="300">
+            Esperienze incredibili ti aspettano a ComixCity!
+          </p>
+        </div>
+      </section>
+
+      <% if (query) { %>
+        <p class="search-feedback" data-aos="fade-down">
+          🔎 Risultati per "<strong>
+            <%= query %>
+          </strong>"
+        </p>
+        <% } %>
+          <% if (eventi.length> 0) { %> <% eventi.forEach(evento=> { %>
+              <div class="evento-box">
+                <h3>
+                  <%= evento.nome %>
+                </h3>
+                <p>
+                  <%= evento.descrizione %>
+                </p>
+              </div>
+              <% }) %>
+                <% } else { %>
+                  <p>Nessun evento trovato.</p>
+                  <% } %>
+
+                    <!-- CONTENUTO EVENTI -->
+                    <section class="eventi-main">
+                      <div class="eventi-container" data-aos="fade-up" data-aos-delay="400">
+                        <h2 data-aos="fade-right" data-aos-delay="500">I Nostri Eventi</h2>
+
+                        <div class="eventi-grid1">
+                          <div class="evento-card" data-aos="zoom-in" data-aos-delay="600" data-categoria="gaming">
+                            <img src="/img/gaming.jpg" alt="Gaming Arena" />
+                            <h3>Gaming Arena</h3>
+                            <p>
+                              Partecipa ai tornei di videogiochi su console e PC. Sfida i
+                              migliori gamer!
+                            </p>
+                            <a href="/biglietti" class="btn-secondary">Partecipa</a>
+                          </div>
+
+                          <div class="evento-card" data-aos="zoom-in" data-aos-delay="700" data-categoria="cosplay">
+                            <img src="/img/jjk.jpg" alt="Cosplay Contest" />
+                            <h3>Cosplay Contest</h3>
+                            <p>Vivi il magico mondo dei cosplay e vinci fantastici premi!</p>
+                            <a href="/biglietti" class="btn-secondary">Iscriviti</a>
+                          </div>
+
+                          <div class="evento-card" data-aos="zoom-in" data-aos-delay="800" data-categoria="fumetto">
+                            <img src="/img/isoka.jpg" alt="Workshop Fumetto" />
+                            <h3>Workshop Fumetto</h3>
+                            <p>
+                              Scopri i segreti del disegno manga e comics dai grandi autori.
+                            </p>
+                            <a href="/biglietti" class="btn-secondary">Scopri di più</a>
+                          </div>
+
+                          <div class="evento-card" data-aos="zoom-in" data-aos-delay="900" data-categoria="incontri">
+                            <img src="/img/Celeb.png" alt="Incontri Speciali" />
+                            <h3>Incontri Speciali</h3>
+                            <p>
+                              Conosci i tuoi artisti preferiti in eventi esclusivi e
+                              firmacopie!
+                            </p>
+                            <a href="/biglietti" class="btn-secondary">Prenota</a>
+                          </div>
+
+                          <div class="evento-card" data-aos="zoom-in" data-aos-delay="1000" data-categoria="quiz">
+                            <img src="/img/evento-quiz.jpg" alt="Quiz Nerd Night" />
+                            <h3>Quiz Nerd</h3>
+                            <p>
+                              Un pomeriggio a colpi di domande su film, serie e fumetti. Vinci
+                              premi geek!
+                            </p>
+                            <a href="/biglietti" class="btn-secondary">Partecipa</a>
+                          </div>
+
+                          <div class="evento-card" data-aos="zoom-in" data-aos-delay="1100" data-categoria="cinema">
+                            <img src="/img/evento-cinema.jpg" alt="Cinema Live Cosplay" />
+                            <h3>Cinema Live Cosplay</h3>
+                            <p>
+                              Proiezione di film cult con performance in costume dal vivo!
+                            </p>
+                            <a href="/biglietti" class="btn-secondary">Prenota</a>
+                          </div>
+
+                          <div class="evento-card" data-aos="zoom-in" data-aos-delay="1200" data-categoria="boardgames">
+                            <img src="/img/evento-boardgames.jpg" alt="Torneo Board Games" />
+                            <h3>Torneo Board Games</h3>
+                            <p>
+                              Unisciti al torneo di giochi da tavolo, dal classico al fantasy!
+                            </p>
+                            <a href="/biglietti" class="btn-secondary">Iscriviti</a>
+                          </div>
+
+                          <div class="evento-card" data-aos="zoom-in" data-aos-delay="1300" data-categoria="disegno">
+                            <img src="/img/evento-disegno.jpg" alt="Sessione Disegno Anime" />
+                            <h3>Sessione Disegno Anime</h3>
+                            <p>
+                              Porta il tuo sketchbook e disegna insieme ad altri appassionati!
+                            </p>
+                            <a href="/biglietti" class="btn-secondary">Scopri di più</a>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+    </section>
+
+    <%- include('partials/footer') %>
+      <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+      <script src="/js/script.js"></script>
+
+    <% if (user && user.ruolo === 'admin') { %>
+      <a href="/eventi/nuovo" class="admin-fab" title="Nuovo Evento">+</a>
+    <% } %>
+</body>
+
+</html>

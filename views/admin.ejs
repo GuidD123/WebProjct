@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Panel - ComixCity</title>
+    <link rel="stylesheet" href="/css/stile.css" />
+  </head>
+
+  <body>
+    <%- include('partials/navbar1') %>
+
+    <section class="background-gradient mt-2">
+      <h1>👑 Pannello Amministratore</h1>
+
+      <section class="admin-dashboard mb-2">
+        <h2>📊 Statistiche Generali</h2>
+        <ul>
+          <li>
+            <strong>👥 Utenti registrati:</strong>
+            <%= stats.utenti %>
+          </li>
+          <li>
+            <strong>🧱 Stand prenotati:</strong>
+            <%= stats.prenotazioni %>
+          </li>
+          <li>
+            <strong>🎟 Biglietti venduti:</strong>
+            <%= stats.biglietti %>
+          </li>
+          <li><strong>💰 Incasso totale:</strong> €<%= Number(stats.incasso).toLocaleString('it-IT', {minimumFractionDigits:2, maximumFractionDigits:2}) %></li>
+        </ul>
+      </section>
+
+      <h2>Utenti Registrati</h2>
+      <table class="carrello-tabella">
+        <caption class="sr-only">Elenco utenti registrati</caption>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Ruolo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (utenti && utenti.length) { %>
+            <% utenti.forEach(u=> { %>
+              <tr>
+                <td><%= u.id %></td>
+                <td><%= u.username %></td>
+                <td><%= u.email %></td>
+                <td><%= u.ruolo %></td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr><td colspan="4">Nessun utente trovato.</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+
+      <h2>Stand Prenotati</h2>
+      <table class="carrello-tabella">
+      <caption class="sr-only">Elenco stand prenotati</caption>
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Espositore</th>
+          <th scope="col">Stand</th>
+          <th scope="col">Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (prenotazioni && prenotazioni.length) { %>
+          <% prenotazioni.forEach(p => { %>
+            <tr>
+              <td><%= p.id %></td>
+              <td><%= p.espositore %></td>
+              <td><%= p.stand %></td>
+              <td><%= p.data_prenotazione %></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="4">Nessuna prenotazione trovata.</td></tr>
+        <% } %>
+      </tbody>
+      </table>
+
+      <h2>Ordini Biglietti</h2>
+      <table class="carrello-tabella">
+        <caption class="sr-only">Elenco ordini biglietti</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Utente</th>
+            <th scope="col">Data</th>
+            <th scope="col">Totale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (acquisti && acquisti.length) { %>
+            <% acquisti.forEach(a => { %>
+              <tr>
+                <td><%= a.id %></td>
+                <td><%= a.acquirente %></td>
+                <td><%= a.data %></td>
+                <td>
+                  €<%= Number(a.totale).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2}) %>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr><td colspan="4">Nessun ordine trovato.</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </section>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

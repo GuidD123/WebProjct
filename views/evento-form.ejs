@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= evento ? "Modifica Evento" : "Nuovo Evento" %> - ComixCity</title>
+  <link rel="stylesheet" href="/css/stile.css" />
+</head>
+
+<body>
+  <%- include('../partials/navbar1') %>
+
+  <section class="background-gradient form-admin-evento">
+    <div class="form-container">
+      <h1><%= evento ? "Modifica Evento" : "Crea un Nuovo Evento" %></h1>
+
+      <form action="<%= evento ? '/eventi/modifica/' + evento.id : '/eventi/nuovo' %>" method="POST">
+        
+        <label for="titolo">Titolo Evento:</label>
+        <input type="text" id="titolo" name="titolo" required value="<%= evento?.titolo || '' %>" />
+
+        <label for="descrizione">Descrizione:</label>
+        <textarea id="descrizione" name="descrizione" required><%= evento?.descrizione || '' %></textarea>
+
+        <label for="data">Data Evento:</label>
+        <input type="date" id="data" name="data" required value="<%= evento?.data?.slice(0, 10) || '' %>" />
+
+        <label for="immagine">URL Immagine:</label>
+        <input type="text" id="immagine" name="immagine" value="<%= evento?.immagine || '' %>" />
+
+        <button type="submit" class="btn">
+          <%= evento ? "Salva Modifiche" : "Crea Evento" %>
+        </button>
+      </form>
+
+      <% if (evento) { %>
+        <form action="/eventi/elimina/<%= evento.id %>" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questo evento?');">
+          <button type="submit" class="btn btn-secondary mt-2">Elimina Evento</button>
+        </form>
+      <% } %>
+
+    </div>
+  </section>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

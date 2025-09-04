@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profilo Utente - ComixCity</title>
+  <link rel="stylesheet" href="/css/stile.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+</head>
+
+<body>
+  <%- include('partials/navbar1') %>
+
+  <section class="background-gradient">
+    <!-- HERO PROFILO -->
+    <section class="hero">
+      <div class="hero-content-chisiamo">
+        <h1 data-aos="fade-up">Area Personale</h1>
+        <p data-aos="fade-up" data-aos-delay="200">
+          Benvenuto, <%= user.username %>!
+        </p>
+        <p data-aos="fade-up" data-aos-delay="300">
+          Ruolo: <%= user.ruolo %>
+        </p>
+      </div>
+    </section>
+
+    <!-- MESSAGGI DI FEEDBACK -->
+    <!-- Abbiamo centralizzato i messaggi qui, leggibili una sola volta se usi flash -->
+    <div aria-live="polite" class="feedback-messages">
+      <% if (flash && flash.success) { %>
+        <p class="successo" data-aos="fade-down"><%= flash.success %></p>
+      <% } %>
+      <% if (flash && flash.error) { %>
+        <p class="errore" data-aos="fade-down"><%= flash.error %></p>
+      <% } %>
+    </div>
+
+    <main class="profilo-main">
+      <div class="profilo-container">
+
+        <!-- BLOCCO UNICO if/else per evitare duplicazioni -->
+        <% if (user.ruolo === 'utente') { %>
+          <!-- SEZIONE UTENTE: biglietti acquistati -->
+          <section data-aos="fade-up">
+            <h2>I tuoi biglietti</h2>
+            <% if (biglietti && biglietti.length > 0) { %>
+              <div class="biglietti-acquistati-grid">
+                <% biglietti.forEach(b => { %>
+                  <article class="biglietto-card" data-aos="fade-up">
+                    <h3>🎫 <%= b.nome %></h3>
+                    <p><strong>Quantità:</strong> <%= b.quantita %></p>
+                    <p><strong>Prezzo unitario:</strong> €<%= Number(b.prezzo).toFixed(2) %></p>
+                    <p><strong>Totale:</strong> €<%= (b.quantita * b.prezzo).toFixed(2) %></p>
+                    <p class="data-acquisto">📅 Acquistato il <%= b.data_acquisto %></p>
+                  </article>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <p>Non hai ancora acquistato biglietti.</p>
+            <% } %>
+          </section>
+
+        <% } else if (user.ruolo === 'espositore') { %>
+          <!-- SEZIONE ESPOSITORE: stand prenotati -->
+          <section data-aos="fade-up">
+            <h2>Stand prenotati</h2>
+            <% if (stand && stand.length > 0) { %>
+              <ul>
+                <% stand.forEach(s => { %>
+                  <li>
+                    🧱 Stand <strong><%= s.nome || s.id %></strong> —
+                    <%= s.zona ? ("Zona: " + s.zona) : "Zona non specificata" %>
+                    <br /><small>Prenotato il <%= s.data_prenotazione %></small>
+
+                    <!-- Aggiunto token CSRF per sicurezza -->
+                    <form action="/stand/annulla" method="POST" class="inline">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <input type="hidden" name="standId" value="<%= s.id %>">
+                      <button type="submit" class="btn-secondary ml-1">Annulla</button>
+                    </form>
+                  </li>
+                <% }) %>
+              </ul>
+            <% } else { %>
+              <p>Non hai ancora prenotato stand.</p>
+            <% } %>
+          </section>
+        <% } %>
+
+      </div>
+    </main>
+
+    <!-- MODIFICA PROFILO -->
+    <section data-aos="fade-up">
+      <h2>Modifica Profilo</h2>
+      <form action="/areapersonale/modifica" method="POST" class="register-form">
+        <!-- CSRF aggiunto -->
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <label for="username">Nuovo username</label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          value="<%= user.username %>"
+          required
+          autocomplete="username"
+        />
+
+        <label for="email">Nuova email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          value="<%= user.email %>"
+          required
+          autocomplete="email"
+        />
+
+        <button type="submit" class="btn">Salva modifiche</button>
+      </form>
+    </section>
+
+    <!-- CAMBIA PASSWORD -->
+    <section data-aos="fade-up">
+      <h2>Cambia Password</h2>
+      <form action="/areapersonale/cambia-password" method="POST" class="register-form">
+        <!-- CSRF aggiunto -->
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <label for="passwordAttuale">Password attuale</label>
+        <input
+          type="password"
+          name="passwordAttuale"
+          id="passwordAttuale"
+          required
+          autocomplete="current-password"
+        />
+
+        <label for="nuovaPassword">Nuova password</label>
+        <input
+          type="password"
+          name="nuovaPassword"
+          id="nuovaPassword"
+          required
+          autocomplete="new-password"
+        />
+
+        <label for="confermaPassword">Conferma nuova password</label>
+        <input
+          type="password"
+          name="confermaPassword"
+          id="confermaPassword"
+          required
+          autocomplete="new-password"
+        />
+
+        <button type="submit" class="btn">Cambia password</button>
+      </form>
+    </section>
+  </section>
+
+  <%- include('partials/footer') %>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="/js/script.js"></script>
+</body>
+</html>
