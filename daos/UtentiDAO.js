@@ -6,7 +6,8 @@ class UtentiDAO {
   // Login: trova utente per email
   async getByEmail(email) {
     return new Promise((resolve, reject) => {
-      this.db.get("SELECT * FROM utenti WHERE email = ?", [email], (err, row) => {
+      //LOWER per cercare email nel db con lower così avviene la normalizzazione 
+      this.db.get("SELECT * FROM utenti WHERE LOWER(email) = LOWER(?) LIMIT 1", [email], (err, row) => {
         if (err) reject(err);
         else resolve(row); // può essere null se non trovato
       });

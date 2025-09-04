@@ -14,6 +14,7 @@ function initCarrello(req, res, next) {
 
 // GET /carrello - mostra il carrello
 router.get("/", ensureAuthenticated, initCarrello, (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   const carrello = req.session.carrello;
   const totale = carrello.reduce(
     (sum, item) => sum + item.prezzo * item.quantita,
@@ -143,6 +144,7 @@ router.post("/svuota", ensureAuthenticated, (req, res) => {
 
 // GET /carrello/checkout - mostra riepilogo e metodo di pagamento
 router.get("/checkout", ensureAuthenticated, initCarrello, (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   const carrello = req.session.carrello;
   const totale = carrello.reduce(
     (sum, item) => sum + item.prezzo * item.quantita,0);

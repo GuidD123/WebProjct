@@ -13,7 +13,10 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
   const db = await dbPromise;
   const utentiDAO = new UtentiDAO(db);
-  const { username, email, password, ruolo } = req.body;
+  const email = String(req.body.email || "").trim().toLowerCase(); //quando si riceve mail dal form viene normalizzata 
+  const username = String(req.body.username || "").trim();
+  const password = req.body.password;
+  const ruolo = req.body.ruolo;
 
   if (!username || !email || !password || !ruolo) {
     return res.status(400).send("Tutti i campi sono obbligatori.");

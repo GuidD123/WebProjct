@@ -25,10 +25,6 @@
    //password attuale? → verificata con bcrypt.compare()
 
 
-
-
-
-
 const express = require("express");
 const router = express.Router();
 const { ensureAuthenticated } = require("../middleware/auth");
@@ -38,6 +34,7 @@ const UtentiDAO = require("../daos/UtentiDAO");
 
 // Rotta area personale
 router.get("/areapersonale", ensureAuthenticated, async (req, res) => {
+   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   const db = await dbPromise;
   const user = req.user;
   const utentiDAO = new UtentiDAO(db);
@@ -77,12 +74,13 @@ router.get("/areapersonale", ensureAuthenticated, async (req, res) => {
 router.post("/areapersonale/modifica", ensureAuthenticated, async (req, res) => {
   const db = await dbPromise;
   const utentiDAO = new UtentiDAO(db);
-  const { username, email } = req.body;
+  const username = String(req.body.username || '').trim();
+  const email = String(req.body.email || '').trim().toLowerCase();
   const userId = req.user.id;
 
   try {
     const emailEsistente = await db.get(
-      "SELECT * FROM utenti WHERE email = ? AND id != ?",
+     "SELECT * FROM utenti WHERE LOWER(email) = LOWER(?) AND id != ?",
       [email, userId]
     );
     if (emailEsistente)
