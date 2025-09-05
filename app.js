@@ -21,6 +21,26 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//security header globali:
+//Tutte le risposte avranno i security headers.
+//Migliora score di sicurezza e privacy.
+//Blocca exploit comuni di XSS, clickjacking, sniffing, informazioni su server.
+app.use((req, res, next) => {
+  res.set({
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'X-XSS-Protection': '1; mode=block',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Cache-Control': 'no-store, no-cache, must-revalidate, private',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+    'Content-Security-Policy': "default-src 'self'"
+  });
+  if (res.removeHeader) res.removeHeader('X-Powered-By'); // nasconde info su Express
+  next();
+});
+
+
 //Usato per la ricerca nella search-form
 app.use("/research", require("./routes/research"));
 

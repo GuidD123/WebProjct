@@ -70,6 +70,7 @@ router.get("/areapersonale", ensureAuthenticated, async (req, res) => {
   }
 });
 
+
 // Modifica username/email
 router.post("/areapersonale/modifica", ensureAuthenticated, async (req, res) => {
   const db = await dbPromise;
@@ -77,6 +78,14 @@ router.post("/areapersonale/modifica", ensureAuthenticated, async (req, res) => 
   const username = String(req.body.username || '').trim();
   const email = String(req.body.email || '').trim().toLowerCase();
   const userId = req.user.id;
+
+  // Validazione -> controllo sui dati inseriti dall'utente (input form) -> impedisce dati sbagliati, pericolosi o incoerenti
+  if (!validator.isEmail(email)) {
+    return res.status(400).render("areapersonale", { errore: "Email non valida.", user: req.user });
+  }
+  if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
+    return res.status(400).render("areapersonale", { errore: "Username non valido.", user: req.user });
+  }
 
   try {
     const emailEsistente = await db.get(
@@ -95,9 +104,11 @@ router.post("/areapersonale/modifica", ensureAuthenticated, async (req, res) => 
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Errore durante la modifica del profilo.");
+    res.status(500).render("areapersonale", { errore: "Errore durante la modifica del profilo.", user: req.user });
   }
 });
+
+
 
 // Cambio password
 router.post("/areapersonale/cambia-password", ensureAuthenticated, async (req, res) => {
@@ -105,6 +116,17 @@ router.post("/areapersonale/cambia-password", ensureAuthenticated, async (req, r
   const utentiDAO = new UtentiDAO(db);
   const { passwordAttuale, nuovaPassword, confermaPassword } = req.body;
   const userId = req.user.id;
+
+  //validazione nuova password
+  if (!nuovaPassword || !confermaPassword) {
+    return res.redirect("/areapersonale?password=err&msg=Password obbligatoria");
+  }
+  if (nuovaPassword.length < 8 || !/[A-Za-z]/.test(nuovaPassword) || !/[0-9]/.test(nuovaPassword)) {
+    return res.redirect("/areapersonale?password=err&msg=Password troppo debole");
+  }
+  if (nuovaPassword !== confermaPassword) {
+    return res.redirect("/areapersonale?password=err&msg=Le password non coincidono");
+  }
 
   try {
     const user = await utentiDAO.getById(userId);
