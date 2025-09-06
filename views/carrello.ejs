@@ -150,5 +150,22 @@
 
     <!--Script.js-->
     <script src="/js/script.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const checkoutForm = document.querySelector(
+          'form[action="/carrello/checkout"]'
+        );
+        if (checkoutForm) {
+          checkoutForm.addEventListener("submit", function (e) {
+            const btn = checkoutForm.querySelector("button[type=submit]");
+            if (btn) {
+              btn.disabled = true;
+              btn.innerText = "Attendi...";
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>

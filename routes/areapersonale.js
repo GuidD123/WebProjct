@@ -31,6 +31,7 @@ const { ensureAuthenticated } = require("../middleware/auth");
 const dbPromise = require("../db");
 const bcrypt = require("bcrypt");
 const UtentiDAO = require("../daos/UtentiDAO");
+const validator = require('validator');
 
 // Rotta area personale
 router.get("/areapersonale", ensureAuthenticated, async (req, res) => {

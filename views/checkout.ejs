@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checkout - ComixCity</title>
+  <link rel="stylesheet" href="/css/stile.css" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+</head>
+<body>
+  <%- include('partials/navbar1') %>
+
+  <section class="background-gradient">
+    <!-- HERO CHECKOUT -->
+    <section class="hero2 carrello-hero">
+      <div class="hero-content-chisiamo">
+        <h1 data-aos="fade-up">Conferma Acquisto</h1>
+        <h2 data-aos="fade-up" data-aos-delay="300">
+          Verifica il riepilogo prima di procedere al pagamento!
+        </h2>
+      </div>
+    </section>
+
+    <section class="carrello-main">
+      <div class="carrello-container" data-aos="fade-up">
+        <table class="carrello-tabella" data-aos="fade-up" data-aos-delay="200">
+            <caption class="sr-only">Riepilogo ordine</caption>
+            <thead>
+            <tr>
+              <th>Biglietto</th>
+              <th>Quantità</th>
+              <th>Prezzo</th>
+              <th>Totale</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (carrello.length === 0) { %>
+            <tr>
+              <td colspan="4" class="carrello-vuoto">Il carrello è vuoto.</td>
+            </tr>
+            <% } else { %>
+              <% carrello.forEach(item => { %>
+              <tr>
+                <td><%= item.nome %></td>
+                <td><%= item.quantita %></td>
+                <td>€<%= item.prezzo.toFixed(2) %></td>
+                <td>€<%= (item.quantita * item.prezzo).toFixed(2) %></td>
+              </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+
+        <div class="carrello-totale">
+          <h3>Totale: €<%= Number(totale).toFixed(2) %></h3>
+        </div>
+        
+        <% if (carrello.length > 0) { %>
+        <form method="POST" action="/carrello/checkout" class="mt-2">
+          <button class="btn" type="submit" id="btnConferma">Conferma Acquisto</button>
+        </form>
+        <% } else { %>
+        <a class="btn disabled-link mt-2">Conferma Acquisto</a>
+        <% } %>
+        <a href="/carrello" class="btn btn-secondary ml-2 mt-2">Torna al carrello</a>
+      </div>
+    </section>
+  </section>
+
+  <%- include('partials/footer1') %>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="/js/script.js"></script>
+  <script>
+  document.getElementById('btnConferma')?.addEventListener('click', function(){
+    this.disabled = true;
+    this.form.submit();
+  });
+</script>
+
+</body>
+</html>

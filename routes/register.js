@@ -38,10 +38,11 @@ router.post("/", async (req, res) => {
   // Password: minimo 8 caratteri, almeno una lettera e un numero
   if (
     !validator.isLength(password, { min: 8 }) ||
-    !/[a-zA-Z]/.test(password) ||
-    !/[0-9]/.test(password)
+    !/[A-Z]/.test(password) ||     // almeno una maiuscola
+    !/[a-z]/.test(password) ||     // almeno una minuscola
+    !/[0-9]/.test(password)        // almeno un numero
   ) {
-    return res.status(400).render("register", { errore: "Password troppo debole. Minimo 8 caratteri, almeno una lettera e un numero." });
+    return res.status(400).render("register", { errore: "Password troppo debole. Minimo 8 caratteri, almeno una maiuscola, una minuscola e un numero." });
   }
 
   // Ruolo valido (selezione dal form, evita hack)

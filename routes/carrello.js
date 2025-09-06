@@ -14,7 +14,7 @@ function initCarrello(req, res, next) {
 
 // GET /carrello - mostra il carrello
 router.get("/", ensureAuthenticated, initCarrello, (req, res) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
   const carrello = req.session.carrello;
   const totale = carrello.reduce(
     (sum, item) => sum + item.prezzo * item.quantita,
@@ -29,8 +29,26 @@ router.post(
   ensureAuthenticated,
   initCarrello,
   async (req, res) => {
+    const id = parseInt(req.body.id);
+    const quantita = parseInt(req.body.quantita);
+    const prezzo = parseFloat(req.body.prezzo);
+
+    // Validazione ID e quantità PRIMA della query
+    if (
+      !id ||
+      isNaN(id) ||
+      id <= 0 ||
+      !quantita ||
+      isNaN(quantita) ||
+      quantita < 1 ||
+      quantita > 5
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Dati non validi" });
+    }
+
     const db = await dbPromise;
-    const { id, quantita, prezzo } = req.body;
     const biglietto = await db.get("SELECT * FROM biglietti WHERE id = ?", [
       id,
     ]);
@@ -94,9 +112,18 @@ router.post(
   ensureAuthenticated,
   initCarrello,
   (req, res) => {
+
     const i = parseInt(req.params.index);
+
+    // Validazione index
+    if (isNaN(i) || i < 0 || i >= req.session.carrello.length) {
+      return res.redirect("/carrello?errore=index_non_valido");
+    }
+
     if (req.session.carrello[i]) {
-      req.session.carrello[i].quantita += 1;
+      if (req.session.carrello[i].quantita < 5) {
+        req.session.carrello[i].quantita += 1;
+      }
     }
     res.redirect("/carrello");
   }
@@ -108,7 +135,14 @@ router.post(
   ensureAuthenticated,
   initCarrello,
   (req, res) => {
+
     const i = parseInt(req.params.index);
+
+    // Validazione index
+    if (isNaN(i) || i < 0 || i >= req.session.carrello.length) {
+      return res.redirect("/carrello?errore=index_non_valido");
+    }
+
     if (req.session.carrello[i]) {
       if (req.session.carrello[i].quantita > 1) {
         req.session.carrello[i].quantita -= 1;
@@ -126,7 +160,14 @@ router.post(
   ensureAuthenticated,
   initCarrello,
   (req, res) => {
+
     const i = parseInt(req.params.index);
+
+    // Validazione index
+    if (isNaN(i) || i < 0 || i >= req.session.carrello.length) {
+      return res.redirect("/carrello?errore=index_non_valido");
+    }
+    
     if (req.session.carrello[i]) {
       req.session.carrello.splice(i, 1);
     }
@@ -140,14 +181,14 @@ router.post("/svuota", ensureAuthenticated, (req, res) => {
   res.redirect("/carrello?svuotato=ok");
 });
 
-
-
 // GET /carrello/checkout - mostra riepilogo e metodo di pagamento
 router.get("/checkout", ensureAuthenticated, initCarrello, (req, res) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
   const carrello = req.session.carrello;
   const totale = carrello.reduce(
-    (sum, item) => sum + item.prezzo * item.quantita,0);
+    (sum, item) => sum + item.prezzo * item.quantita,
+    0
+  );
 
   if (!carrello || carrello.length === 0) {
     return res.redirect("/carrello?errore=carrello_vuoto");
@@ -155,8 +196,6 @@ router.get("/checkout", ensureAuthenticated, initCarrello, (req, res) => {
 
   res.render("checkout", { carrello, totale });
 });
-
-
 
 // POST /carrello/checkout
 router.post(
